@@ -23,11 +23,11 @@ Sistem prediksi status produk (Laris / Tidak Laris) berbasis Machine Learning de
 ## Arsitektur Sistem
 
 ```
-┌─────────────────┐        ┌──────────────────────┐        ┌─────────────────┐
+┌─────────────────┐        ┌──────────────────────┐         ┌─────────────────┐
 │   Frontend      │  HTTP  │   Backend (FastAPI)   │  load  │   ML Model      │
 │   Next.js 16    │◄──────►│   REST API + JWT      │◄──────►│   model.pkl     │
 │   Port 3000     │        │   Port 8000           │        │   Random Forest │
-└─────────────────┘        └──────────┬───────────┘        └─────────────────┘
+└─────────────────┘        └──────────┬───────────┘         └─────────────────┘
                                        │ read
                                        ▼
                               ┌─────────────────┐
@@ -271,13 +271,3 @@ Saat ganti halaman tabel, data lama tetap terlihat (opacity-50) selama fetch ber
 
 **5. Lazy load model**
 `model.pkl` dimuat saat request pertama ke `/api/predict` dan disimpan di memory proses. Request berikutnya langsung menggunakan model yang sudah dimuat tanpa overhead I/O.
-
----
-
-## Asumsi
-
-- Dataset sudah tersedia di `data/sales_data.csv` sebelum menjalankan training
-- Kolom `status` pada CSV hanya berisi nilai `Laris` atau `Tidak` (case-sensitive)
-- Dummy user (`admin@gmail.com` / `admin123`) digunakan sesuai ketentuan soal
-- Frontend dan backend berjalan di mesin yang sama (localhost)
-- `model.pkl` di-commit bersama source code sehingga training tidak wajib diulang jika file sudah ada
