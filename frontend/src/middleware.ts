@@ -2,14 +2,14 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
-  const isLoggedIn = request.cookies.has('is_logged_in')
+  const token = request.cookies.get('access_token')?.value
   const path = request.nextUrl.pathname
 
-  if (!isLoggedIn && (path === '/' || path.startsWith('/dashboard'))) {
+  if (!token && (path === '/' || path.startsWith('/dashboard'))) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
-  if (isLoggedIn && (path === '/' || path === '/login')) {
+  if (token && (path === '/' || path === '/login')) {
     return NextResponse.redirect(new URL('/dashboard', request.url))
   }
 
