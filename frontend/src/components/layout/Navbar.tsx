@@ -1,3 +1,5 @@
+"use client";
+
 import { Search, Bell } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -13,8 +15,15 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import { Sidebar } from "./Sidebar";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 export function Navbar() {
+  const router = useRouter();
+
+  const handleLogout = () => {
+    document.cookie = "access_token=; max-age=0; path=/";
+    router.push("/login");
+  };
   return (
     <header className="h-[70px] bg-background border-b border-border sticky top-0 z-30 flex items-center justify-between px-4 lg:px-8">
       <div className="flex items-center gap-4">
@@ -60,7 +69,7 @@ export function Navbar() {
               <DropdownMenuItem>Settings</DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-destructive">Log out</DropdownMenuItem>
+            <DropdownMenuItem className="text-destructive" onClick={handleLogout}>Log out</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

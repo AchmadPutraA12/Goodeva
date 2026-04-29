@@ -20,11 +20,20 @@ def _load_csv() -> pd.DataFrame:
 @router.get("/sales", response_model=SalesResponse, summary="Ambil data penjualan")
 def get_sales(
     page: int = Query(default=1, ge=1, description="Nomor halaman"),
-    page_size: int = Query(default=20, ge=1, le=100, description="Jumlah data per halaman"),
+    page_size: int = Query(default=10, ge=1, le=100, description="Jumlah data per halaman"),
     status: str | None = Query(default=None, description="Filter status: Laris / Tidak"),
+    search: str | None = Query(default=None, description="Cari berdasarkan nama atau ID produk"),
     _: TokenData = Depends(get_current_user),
 ):
     df = _load_csv()
+
+    if search:
+        keyword = search.strip().lower()
+        mask = (
+            df["product_name"].str.lower().str.contains(keyword, na=False) |
+            df["product_id"].str.lower().str.contains(keyword, na=False)
+        )
+        df = df[mask]
 
     if status:
         df = df[df["status"].str.lower() == status.lower()]

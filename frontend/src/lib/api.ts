@@ -56,9 +56,10 @@ export interface PredictResponse {
 }
 
 export const api = {
-  getSales: (page = 1, pageSize = 20, status?: string) => {
+  getSales: (page = 1, pageSize = 10, status?: string, search?: string) => {
     const params = new URLSearchParams({ page: String(page), page_size: String(pageSize) });
     if (status) params.set("status", status);
+    if (search) params.set("search", search);
     return request<SalesResponse>(`/sales?${params}`);
   },
   predict: (body: PredictRequest) =>
