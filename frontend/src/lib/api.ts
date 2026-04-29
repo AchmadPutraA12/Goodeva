@@ -55,6 +55,31 @@ export interface PredictResponse {
   probability_tidak: number;
 }
 
+export interface TopProduct {
+  product_id: string;
+  product_name: string;
+  jumlah_penjualan: number;
+  status: string;
+}
+
+export interface DiskonBucket {
+  label: string;
+  laris: number;
+  tidak: number;
+}
+
+export interface StatsResponse {
+  total_produk: number;
+  total_laris: number;
+  total_tidak: number;
+  pct_laris: number;
+  total_penjualan: number;
+  avg_harga: number;
+  avg_diskon: number;
+  top_products: TopProduct[];
+  diskon_distribution: DiskonBucket[];
+}
+
 export const api = {
   getSales: (page = 1, pageSize = 10, status?: string, search?: string) => {
     const params = new URLSearchParams({ page: String(page), page_size: String(pageSize) });
@@ -64,4 +89,5 @@ export const api = {
   },
   predict: (body: PredictRequest) =>
     request<PredictResponse>("/predict", { method: "POST", body: JSON.stringify(body) }),
+  getStats: () => request<StatsResponse>("/stats"),
 };
